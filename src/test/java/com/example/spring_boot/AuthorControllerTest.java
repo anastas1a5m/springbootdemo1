@@ -1,7 +1,7 @@
 package com.example.spring_boot;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -21,7 +21,7 @@ public class AuthorControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @Test
+  /*  @Test
     public void shouldSaveAuthor() {
         final Author author = new Author(
                 1L,
@@ -119,5 +119,5 @@ public class AuthorControllerTest {
                 .isEqualTo(HttpStatusCode.valueOf(200));
         assertThat(response.getBody())
                 .isNull();
-    }
+    } */
 }

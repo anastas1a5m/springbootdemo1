@@ -1,4 +1,5 @@
 package com.example.spring_boot;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,6 +26,8 @@ public class CheckHTTPResponse {
         assertThat(restTemplate.getForObject("http://localhost:" + port + "/hello/Nastya",
                 String.class)).contains("HelloNastya");
     }
+
+
 }
 
 

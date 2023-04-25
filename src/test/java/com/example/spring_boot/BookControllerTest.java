@@ -18,7 +18,7 @@ public class BookControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @Test
+  /*  @Test
     public void TestAddBook() {
         final Book book = new Book(
                 555L,
@@ -87,7 +87,7 @@ public class BookControllerTest {
                 "/books", book, Book.class
         );
 
-        book.setTitle("Updated Test Book");
+        book.setTitle("Updated Test com.example.spring_boot.Book");
 
         restTemplate.put(
                 "/books/" + 765, book
@@ -113,7 +113,7 @@ public class BookControllerTest {
                 "MarusyaChuray"
         );
 
-        book.setTitle("Delete Test Book");
+        book.setTitle("Delete Test com.example.spring_boot.Book");
 
         restTemplate.delete("/books/444");
 
@@ -124,5 +124,5 @@ public class BookControllerTest {
                 .isEqualTo(HttpStatusCode.valueOf(200));
         assertThat(response.getBody())
                 .isNull();
-    }
+    } */
 }

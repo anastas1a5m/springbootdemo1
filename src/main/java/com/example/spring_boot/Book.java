@@ -1,20 +1,38 @@
 package com.example.spring_boot;
 
-public class Book {
-    private Long id;
-    private String title;
-    private String author;
-    private Double price;
-    private String Isbn;
-    private String Description;
+import jakarta.persistence.*;
 
-    public Book(Long id, String title, String author, Double price, String Isbn, String Description) {
+import java.sql.Date;
+
+@Entity
+@Table(name = "book")
+public class Book {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "author_id")
+    private int authorId;
+
+    @Column(name = "published_date")
+    private Date publishedDate;
+
+    @Column(name = "price")
+    private Double price;
+
+    public Book(Long id, String title, int authorId, Date publishedDate, Double price) {
         this.id = id;
         this.title = title;
-        this.author = author;
+        this.authorId = authorId;
+        this.publishedDate = publishedDate;
         this.price = price;
-        this.Isbn = Isbn;
-        this.Description = Description;
+    }
+
+    public Book() {
 
     }
 
@@ -26,20 +44,16 @@ public class Book {
         return title;
     }
 
-    public String getAuthor() {
-        return author;
+    public int getAuthorId() {
+        return authorId;
+    }
+
+    public Date getPublishedDate() {
+        return publishedDate;
     }
 
     public Double getPrice() {
         return price;
-    }
-
-    public String getIsbn() {
-        return Isbn;
-    }
-
-    public String getDescription() {
-        return Description;
     }
 
     public void setId(Long id) {
@@ -50,19 +64,15 @@ public class Book {
         this.title = title;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setAuthorId(int author_id) {
+        this.authorId = author_id;
+    }
+
+    public void setPublishedDate(Date published_date) {
+        this.publishedDate = published_date;
     }
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public void setIsbn(String isbn) {
-        Isbn = isbn;
-    }
-
-    public void setDescription(String description) {
-        Description = description;
     }
 }

@@ -1,6 +1,8 @@
 package com.example.spring_boot;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.spring_boot.Author;
+import com.example.spring_boot.AuthorRepository;
+import com.example.spring_boot.BookRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,40 +10,30 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/authors")
-public class AuthorController{
-    public AuthorController(AuthorRepository authorRepository) {
-        this.authorRepository = authorRepository;
+public record AuthorController(AuthorService authorService) {
+
+    @GetMapping
+    public List<Author> getAllAuthors() {
+        return authorService.findAll();
     }
 
-    private AuthorRepository authorRepository;
-@GetMapping
-    public List<Author> getAllAuthors(){
-    return authorRepository.findAll();
-}
+    @GetMapping("/{id}")
+    public Author getAuthorById(@PathVariable Long id) {
+        return authorService.findById(id);
+    }
 
-@GetMapping("/{id}")
-    public Author getAuthorById(@PathVariable Long id){
-    return authorRepository.findById(id);
-}
-@PostMapping
-    public Author createAuthor(@RequestBody Author author){
-    return authorRepository.save(author);
-}
+    @PostMapping
+    public Author createAuthor(@RequestBody Author author) {
+        return authorService.save(author);
+    }
 
-@PutMapping("/{id}")
-    public Author updateAuthor(@PathVariable Long id,  @RequestBody Author authorDetails){
-    Author authorToUpdate = authorRepository.findById(id);                                                                //оновити наявну книгу
-    authorToUpdate.setName(authorDetails.getName());
-    authorToUpdate.setYearOB(authorDetails.getYearOB());
-    authorToUpdate.setBooks(authorDetails.getBooks());
-    return authorRepository.save(authorToUpdate);
-}
+    @PutMapping("/{id}")
+    public Author updateAuthor(@PathVariable Long id, @RequestBody Author authorDetails) {
+        return authorService.update(id, authorDetails);
+    }
 
-@DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAuthor(@PathVariable Long id){
-    Author author = authorRepository.findById(id);
-
-    authorRepository.deleteById(id);
-    return ResponseEntity.ok().build();
+    @DeleteMapping("/{id}")
+    public void deleteAuthor(@PathVariable Long id) {
+        authorService.deleteById(id);
     }
 }
