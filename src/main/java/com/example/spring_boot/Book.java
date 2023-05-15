@@ -15,10 +15,10 @@ public class Book {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "author_id")
+    @Column(name = "authorId")
     private int authorId;
 
-    @Column(name = "published_date")
+    @Column(name = "publishedDate")
     private Date publishedDate;
 
     @Column(name = "price")
@@ -64,12 +64,12 @@ public class Book {
         this.title = title;
     }
 
-    public void setAuthorId(int author_id) {
-        this.authorId = author_id;
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
     }
 
-    public void setPublishedDate(Date published_date) {
-        this.publishedDate = published_date;
+    public void setPublishedDate(Date publishedDate) {
+        this.publishedDate = publishedDate;
     }
 
     public void setPrice(Double price) {

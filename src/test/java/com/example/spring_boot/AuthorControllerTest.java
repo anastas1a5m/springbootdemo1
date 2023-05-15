@@ -1,123 +1,84 @@
 package com.example.spring_boot;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.testng.annotations.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@RunWith(MockitoJUnitRunner.class)
 public class AuthorControllerTest {
 
-    @Autowired
-    private TestRestTemplate restTemplate;
+    private MockMvc mockMvc;
 
-  /*  @Test
-    public void shouldSaveAuthor() {
-        final Author author = new Author(
-                1L,
-                "IvanFranko",
-                1856.0,
-                "ZaharBerkut"
-        );
+    @Mock
+    private AuthorService authorService;
 
-        ResponseEntity<Author> response = restTemplate.postForEntity(
-                "/authors", author, Author.class
-        );
+    @InjectMocks
+    private AuthorController authorController;
 
-        assertThat(response.getStatusCode())
-                .isEqualTo(HttpStatusCode.valueOf(200));
-        assertThat(response.getBody())
-                .isEqualTo(author);
-    }
-
-    @Test
-    public void testGetAllAuthors() throws Exception {
-        ResponseEntity<List> response = restTemplate.getForEntity(
-                "/authors", List.class
-        );
-        assertThat(response.getStatusCode())
-                .isEqualTo(HttpStatusCode.valueOf(200));
-        assertThat(response.getBody())
-                .isNotNull();
+    @BeforeAll
+    public void setup() {
+        mockMvc = MockMvcBuilders.standaloneSetup(authorController).build();
     }
 
     @Test
     public void testGetAuthorById() throws Exception {
-        final Author author = new Author(
-                222L,
-                "TarasShevchenko",
-                1814.0,
-                "Kobzar"
-        );
+        Author author = new Author(102L, "Ivan Franko");
+        when(authorService.findById(102L)).thenReturn(author);
 
-        restTemplate.postForEntity(
-                "/authors", author, Author.class
-        );
+        mockMvc.perform(get("/authors/102"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(102L))
+                .andExpect(jsonPath("$.name").value("Ivan Franko"));
+    }
 
-        ResponseEntity<Author> response = restTemplate.getForEntity(
-                "/authors/" + author.getId(), Author.class
-        );
-        assertThat(response.getStatusCode())
-                .isEqualTo(HttpStatusCode.valueOf(200));
-        assertThat(response.getBody())
-                .isNotNull();
+    @Test
+    public void shouldSaveAuthor() throws Exception {
+        Author author = new Author(0L, "Taras Shevchenko");
+        when(authorService.save(author)).thenReturn(new Author(1L, "Taras Shevchenko"));
+
+        mockMvc.perform(get("/authors/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.name").value("Taras Sevshenko"));
     }
 
     @Test
     public void testUpdateAuthor() throws Exception {
-        final Author author = new Author(
-                123L,
-                "LinaKostenko",
-                1930.0,
-                "MarusyaChuray"
-        );
-        restTemplate.postForEntity(
-                "/authors", author, Author.class
+        Author author = new Author(0L, "Lesya Ukrainka");
+        when(authorService.update(152L, author)).thenReturn(
+                new Author(152L, author.getName())
         );
 
-        author.setName("Updated Test Author");
-
-        restTemplate.put(
-                "/authors/" + 123, author
-        );
-
-        ResponseEntity<Author> response = restTemplate.getForEntity(
-                "/authors/123", Author.class);
-
-        assertThat(response.getStatusCode())
-                .isEqualTo(HttpStatusCode.valueOf(200));
-        assertThat(response.getBody())
-                .isEqualTo(author);
+        mockMvc.perform(get("/authors/152"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(152L))
+                .andExpect(jsonPath("$.name").value("Lesya Ukrainka"));
     }
 
     @Test
     public void testDeleteAuthor() throws Exception {
-        final Author author = new Author(
-                231L,
-                "lesyaUkrainka",
-                1871.0,
-                "LisovaPisnya"
-        );
-        author.setName("Delete Test Author");
+        Author author = new Author(203L, "Olena Pchilka");
+        Long id = null;
+        when(authorService.deleteById());
 
-        restTemplate.delete("/authors/231");
+        mockMvc.perform(get("/authors/203"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(203L))
+                .andExpect(jsonPath("$.name").value("Olena Pchilka"));
+    }
 
-        ResponseEntity<Author> response = restTemplate.getForEntity(
-                "/authors/231", Author.class);
-
-        assertThat(response.getStatusCode())
-                .isEqualTo(HttpStatusCode.valueOf(200));
-        assertThat(response.getBody())
-                .isNull();
-    } */
 }
+
+

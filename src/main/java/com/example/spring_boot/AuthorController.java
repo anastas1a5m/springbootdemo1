@@ -1,9 +1,5 @@
 package com.example.spring_boot;
 
-import com.example.spring_boot.Author;
-import com.example.spring_boot.AuthorRepository;
-import com.example.spring_boot.BookRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,13 +23,15 @@ public record AuthorController(AuthorService authorService) {
         return authorService.save(author);
     }
 
+
     @PutMapping("/{id}")
     public Author updateAuthor(@PathVariable Long id, @RequestBody Author authorDetails) {
         return authorService.update(id, authorDetails);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAuthor(@PathVariable Long id) {
-        authorService.deleteById(id);
+    public Author deleteAuthor(@PathVariable Long id) {
+        authorService.deleteById();
+        return null;
     }
 }
