@@ -32,9 +32,7 @@ public class AuthorService {
         return authorRepository.save(author);
     }
 
-    public String deleteById() {
-        Long id = null;
+    public void deleteById(Long id) {
         authorRepository.deleteById(id);
-        return null;
     }
 }

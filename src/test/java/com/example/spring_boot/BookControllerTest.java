@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -17,10 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -69,21 +70,24 @@ public class BookControllerTest {
 //                .andExpect(jsonPath("$[0].publishedDate").value("1997-10-9"))
                 .andExpect(jsonPath("$[2].price").value("200.0"));
 
+        verify(bookService, times(1)).findAll();
     }
 
     @Test
     public void testGetBookById() throws Exception {
-        Book book = new Book(3L, "Zahar Berkut", 3, new Date(1988, 12, 11), 700.0);
-        when(bookService.findById(3L)).thenReturn(Optional.of(book));
+        long id = 3;
+        Book book = new Book(id, "Zahar Berkut", 3, new Date(1988, 12, 11), 700.0);
+        when(bookService.findById(anyLong())).thenReturn(Optional.of(book));
 
-        mockMvc.perform(get("/books/3"))
+        mockMvc.perform(get("/books/" + id))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(3L))
+                .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.title").value("Zahar Berkut"))
                 .andExpect(jsonPath("$.authorId").value(3))
 //               .andExpect(jsonPath("$.publishedDate").value("1988-12-11"))
                 .andExpect(jsonPath("$.price").value("700.0"));
 
+        verify(bookService,times(1)).findById(eq(id));
     }
 
     @Test
@@ -100,6 +104,13 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$.authorId").value(9))
   //              .andExpect(jsonPath("$.publishedDate").value("1978-12-11"))
                 .andExpect(jsonPath("$.price").value("1000.0"));
+
+        ArgumentCaptor<Book> bookArgumentCaptor = ArgumentCaptor.forClass(Book.class);
+        verify(bookService, times(1)).save(bookArgumentCaptor.capture());
+
+        assertThat(bookArgumentCaptor.getValue())
+                .isEqualTo(book);
+
 
     }
 
@@ -118,17 +129,24 @@ public class BookControllerTest {
   //              .andExpect(jsonPath("$.publishedDate").value("1978-12-11"))
                 .andExpect(jsonPath("$.price").value("500.0"));
 
+        ArgumentCaptor<Book> bookArgumentCaptor = ArgumentCaptor.forClass(Book.class);
+        verify(bookService, times(1)).update(eq(10L), bookArgumentCaptor.capture());
+
+        assertThat(bookArgumentCaptor.getValue())
+                .isEqualTo(book);
     }
 
     @Test
     public void testDeleteBook() throws Exception {
-        Book book = new Book(20L, "Pchilka", 20, new Date(1989, 12, 11), 400.0);
-        Long id = null;
-        doNothing().when(bookService).deleteById(id);
+     Long id = 20L;
+        Book book = new Book(id, "Pchilka", 20, new Date(1989, 12, 11), 400.0);
+        doNothing().when(bookService).deleteById(anyLong());
 
-        mockMvc.perform(delete("/books/20")
+        mockMvc.perform(delete("/books/" + id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+
+        verify(bookService,times(1)).deleteById(eq(id));
     }
 
 }

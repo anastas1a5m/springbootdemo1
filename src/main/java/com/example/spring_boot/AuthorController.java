@@ -30,8 +30,7 @@ public record AuthorController(AuthorService authorService) {
     }
 
     @DeleteMapping("/{id}")
-    public Author deleteAuthor(@PathVariable Long id) {
-        authorService.deleteById();
-        return null;
+    public void deleteAuthor(@PathVariable Long id) {
+       authorService.deleteById(id);
     }
 }

@@ -3,6 +3,7 @@ package com.example.spring_boot;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "book")
@@ -74,5 +75,18 @@ public class Book {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return authorId == book.authorId && Objects.equals(id, book.id) && Objects.equals(title, book.title) && Objects.equals(publishedDate, book.publishedDate) && Objects.equals(price, book.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, authorId, publishedDate, price);
     }
 }
