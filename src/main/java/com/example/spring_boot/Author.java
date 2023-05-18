@@ -2,7 +2,10 @@ package com.example.spring_boot;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "author")
@@ -18,6 +21,23 @@ public class Author {
     public Author(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    @OneToMany(mappedBy = "author" )
+    private Set<Book> books = new HashSet<>();
+
+    public Author(Long id, String name, Set<Book> books) {
+        this.id = id;
+        this.name = name;
+        this.books = books;
+    }
+
+    public Set<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(Set<Book> books) {
+        this.books = books;
     }
 
     public Author() {

@@ -18,7 +18,7 @@ public class BookService {
     public Book update(Long id, Book bookData) {
         Book bookToUpdate = bookRepository.findById(id).get();                                                                //оновити наявну книгу
         bookToUpdate.setTitle(bookData.getTitle());
-        bookToUpdate.setAuthorId(bookData.getAuthorId());
+        bookToUpdate.setAuthor(bookData.getAuthor());
         bookToUpdate.setPublishedDate(bookData.getPublishedDate());
         bookToUpdate.setPrice(bookData.getPrice());
         return bookRepository.save(bookToUpdate);

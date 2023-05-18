@@ -1,5 +1,6 @@
 package com.example.spring_boot;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.sql.Date;
@@ -16,8 +17,6 @@ public class Book {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "authorId")
-    private int authorId;
 
     @Column(name = "publishedDate")
     private Date publishedDate;
@@ -25,12 +24,25 @@ public class Book {
     @Column(name = "price")
     private Double price;
 
-    public Book(Long id, String title, int authorId, Date publishedDate, Double price) {
+    @ManyToOne
+    @JoinColumn(name = "authorId")
+    @JsonIgnoreProperties("books")
+    private Author author;
+
+    public Book(Long id, String title, Date publishedDate, Double price, Author author) {
         this.id = id;
         this.title = title;
-        this.authorId = authorId;
         this.publishedDate = publishedDate;
         this.price = price;
+        this.author = author;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
     public Book() {
@@ -45,9 +57,6 @@ public class Book {
         return title;
     }
 
-    public int getAuthorId() {
-        return authorId;
-    }
 
     public Date getPublishedDate() {
         return publishedDate;
@@ -65,10 +74,6 @@ public class Book {
         this.title = title;
     }
 
-    public void setAuthorId(int authorId) {
-        this.authorId = authorId;
-    }
-
     public void setPublishedDate(Date publishedDate) {
         this.publishedDate = publishedDate;
     }
@@ -82,11 +87,11 @@ public class Book {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return authorId == book.authorId && Objects.equals(id, book.id) && Objects.equals(title, book.title) && Objects.equals(publishedDate, book.publishedDate) && Objects.equals(price, book.price);
+        return Objects.equals(id, book.id) && Objects.equals(title, book.title) && Objects.equals(publishedDate, book.publishedDate) && Objects.equals(price, book.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, authorId, publishedDate, price);
+        return Objects.hash(id, title, publishedDate, price);
     }
 }
