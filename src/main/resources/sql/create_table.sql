@@ -9,3 +9,9 @@ CREATE TABLE book (
      published_date DATE NOT NULL,
      price NUMERIC(8,2) NOT NULL
 );
+
+CREATE TABLE Users (
+                       user_name text unique not null,
+                       id BIGSERIAL PRIMARY KEY,
+                       password text not null
+);
