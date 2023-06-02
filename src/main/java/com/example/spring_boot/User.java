@@ -3,6 +3,8 @@ package com.example.spring_boot;
 
 import jakarta.persistence.*;
 
+import java.util.*;
+
 @Entity(name = "users")
 public class User {
 
@@ -14,6 +16,23 @@ public class User {
     private String username;
     private String password;
 
+    @ManyToMany
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_books",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id"))
+    private List<Book> favoriteBooks = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_authors",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id"))
+    private List<Author> favoriteAuthors = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -37,5 +56,26 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void addFavoriteBook(Book book) {
+        this.favoriteBooks.add(book);
+
+    }
+
+    public void addFavoriteAuthor(Author author) {
+        this.favoriteAuthors.add(author);
+    }
+
+    public List<Book> getFavoriteBooks() {
+        return favoriteBooks;
+    }
+
+    public List<Author> getFavoriteAuthors() {
+        return favoriteAuthors;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
     }
 }

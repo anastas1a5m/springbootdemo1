@@ -15,3 +15,25 @@ CREATE TABLE Users (
                        id BIGSERIAL PRIMARY KEY,
                        password text not null
 );
+CREATE TABLE roles (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE user_books (
+    id SERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES Users(id),
+    book_id BIGINT NOT NULL REFERENCES book(id)
+);
+
+CREATE TABLE user_authors (
+    id SERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES Users(id),
+    author_id BIGINT NOT NULL REFERENCES author(id)
+);
+
+CREATE TABLE user_roles (
+    id SERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES Users(id),
+    role_id BIGINT NOT NULL REFERENCES roles(id)
+);
