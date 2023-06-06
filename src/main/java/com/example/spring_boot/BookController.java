@@ -10,7 +10,7 @@ import java.util.Optional;
 @RequestMapping("/books")
 public record BookController(BookService bookService) {
 
-    @GetMapping
+    @GetMapping("/")
     public List<Book> getAllBooks() {                                                                                   //отримати всі книги
         return bookService.findAll();
     }

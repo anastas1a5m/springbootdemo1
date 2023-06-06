@@ -84,7 +84,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // fuck csrf
                 .authorizeHttpRequests(authorize -> authorize
 //                        .requestMatchers("/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/users/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/users/favorites/*").hasRole("PREMIUM_USER")
+                                .requestMatchers(HttpMethod.POST, "/users/").permitAll()
+                                .requestMatchers("/books/*").permitAll()
+                                .requestMatchers("/authors/*").authenticated()
                                 .requestMatchers("/error").permitAll()
                                 .anyRequest().authenticated()
                 )

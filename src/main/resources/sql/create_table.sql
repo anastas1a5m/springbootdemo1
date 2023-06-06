@@ -37,3 +37,8 @@ CREATE TABLE user_roles (
     user_id BIGINT NOT NULL REFERENCES Users(id),
     role_id BIGINT NOT NULL REFERENCES roles(id)
 );
+
+INSERT INTO roles(name) VALUES
+                               ('ROLE_REGULAR_USER'),
+                               ('ROLE_PREMIUM_USER'),
+                               ('ROLE_ADMIN');
